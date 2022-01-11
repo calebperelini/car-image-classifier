@@ -35,6 +35,12 @@ def evaluate_images(image_array: list):
         byte_io = BytesIO()
         img.save(byte_io, 'png')
         byte_io.seek(0)  # seek start of I/O stream.
+        regions = ['nz']  # for region prediction.
+        response = requests.post(
+            'https://api.platerecognizer.com/v1/plate-reader/',
+            data=dict(regions=regions),  # Optional
+            files=dict(upload=fp),
+            headers={'Authorization': 'Token c5dde1d98512a9f4d442c16d38ac68f2b6bf36c7'})
 
 
 def main():
