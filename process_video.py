@@ -32,19 +32,23 @@ def capture_frames() -> list:
     return images
 
 
+# process images into bytestream, send to API.
 def evaluate_images(image_array: list) -> list:
     responses = []
     for img in image_array:
+
         byte_io = BytesIO()
         img.save(byte_io, 'png')
         byte_io.seek(0)  # seek start of I/O stream.
-        regions = ['nz']  # for region prediction.
+        regions = ['nz']  # for greater region prediction.
+
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
             data=dict(regions=regions),
             files=dict(upload=byte_io),
             headers={'Authorization': 'Token c5dde1d98512a9f4d442c16d38ac68f2b6bf36c7'})
         responses.append(response.json())
+
     return responses
 
 
