@@ -22,7 +22,8 @@ def capture_frames() -> list:
         if not ret:
             break
         if frame_counter % (fps // sample_rate) == 0:
-            RGB_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # convert colour space from BGR to RGB.
+            # convert colour space from BGR to RGB.
+            RGB_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             images.append(Image.fromarray(RGB_frame))
         frame_counter += 1
 
@@ -31,7 +32,8 @@ def capture_frames() -> list:
     return images
 
 
-def evaluate_images(image_array: list):
+def evaluate_images(image_array: list) -> list:
+    responses = []
     for img in image_array:
         byte_io = BytesIO()
         img.save(byte_io, 'png')
@@ -39,16 +41,16 @@ def evaluate_images(image_array: list):
         regions = ['nz']  # for region prediction.
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
-            data=dict(regions=regions),  # Optional
+            data=dict(regions=regions),
             files=dict(upload=byte_io),
             headers={'Authorization': 'Token c5dde1d98512a9f4d442c16d38ac68f2b6bf36c7'})
-        
-
+        responses.append(response.json())
+    return responses
 
 
 def main():
     image_array = capture_frames()
-    evaluate_images(image_array)
+    results = evaluate_images(image_array)  # to be stored in SQLite DB
 
 
 if __name__ == "__main__":
