@@ -22,7 +22,8 @@ def capture_frames() -> list:
         if not ret:
             break
         if frame_counter % (fps // sample_rate) == 0:
-            images.append(Image.fromarray(frame))
+            RGB_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # convert colour space from BGR to RGB.
+            images.append(Image.fromarray(RGB_frame))
         frame_counter += 1
 
     capture.release()
@@ -39,8 +40,10 @@ def evaluate_images(image_array: list):
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
             data=dict(regions=regions),  # Optional
-            files=dict(upload=fp),
+            files=dict(upload=byte_io),
             headers={'Authorization': 'Token c5dde1d98512a9f4d442c16d38ac68f2b6bf36c7'})
+        
+
 
 
 def main():
