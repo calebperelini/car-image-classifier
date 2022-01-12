@@ -3,11 +3,12 @@ Takes an mp4 file and outputs a series of images using OpenCV.
 """
 import requests
 import cv2
+import database
 from io import BytesIO
 from PIL import Image
 
 
-def capture_frames() -> list:
+def capture_frames():
 
     capture = cv2.VideoCapture("nz_cars_ALPR.mp4")
 
@@ -56,19 +57,23 @@ def db_store(responses):
     entries = []
     for i in responses:
         try:
-            entries.append({
-                'plate': i['results'][0]['plate'],
-                'confidence': i['results'][0]['score'],
-                'process_time': i['processing_time']
-            })
+            entries.append([
+                (i['results'][0]['plate']),
+                (i['results'][0]['score']),
+                (i['processing_time'])
+            ])
         except IndexError:
             print("End of Entries")
             break
+    database.init_db()
+    database.add_many(entries)
+    database.show_all()
 
 
 def main():
     image_array = capture_frames()
     results = evaluate_images(image_array)  # to be stored in SQLite DB
+    db_store(results)
 
 
 if __name__ == "__main__":
