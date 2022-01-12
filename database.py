@@ -1,28 +1,36 @@
+"""
+For SQLite DB handling.
+"""
 import sqlite3
 
-# connect to db
-conn = sqlite3.connect('vehicles.db')
+# initialise db, create data table.
 
-# create cursor
-c = conn.cursor()
+def init_db():
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.execute("""CREATE TABLE vehicles (
+        plate_prediction text,
+        score real,
+        processing_time real
+    )"""
+              )
+    print("Database initialised successfully.")
+    con.commit()
+    con.close()
 
-# create table for plate evaluations.
+def add_one(el):
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.execute("INSERT INTO vehicles VALUES (?, ?, ?)",
+              (el['plate'], el['confidence'], el['process_time']))
+    con.commit()
+    con.close()
 
-# c.execute("""CREATE TABLE vehicles (
-#         plate_prediction text,
-#         score real,
-#         processing_time real
-#     )"""
-#           )
+def del_one(id):
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.execute("DELETE from customers WHERE rowid = (?)", id)
+    con.commit()
+    con.close()
 
-c.execute("INSERT INTO vehicles VALUES ('KNH93', 0.92, 39.23)")
-
-conn.commit()
-
-c.execute("SELECT * FROM vehicles WHERE plate_prediction='KNH93'")
-
-print(c.fetchall())
-
-# commit command, close.
-conn.commit()
-conn.close()
+def add_many(elements):
