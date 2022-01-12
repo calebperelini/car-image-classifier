@@ -52,6 +52,20 @@ def evaluate_images(image_array: list) -> list:
     return responses
 
 
+def db_store(responses):
+    entries = []
+    for i in responses:
+        try:
+            entries.append({
+                'plate': i['results'][0]['plate'],
+                'confidence': i['results'][0]['score'],
+                'process_time': i['processing_time']
+            })
+        except IndexError:
+            print("End of Entries")
+            break
+
+
 def main():
     image_array = capture_frames()
     results = evaluate_images(image_array)  # to be stored in SQLite DB
