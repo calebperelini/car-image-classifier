@@ -5,6 +5,7 @@ import sqlite3
 
 # initialise db, create data table.
 
+
 def init_db():
     con = sqlite3.connect('vehicles.db')
     c = con.cursor()
@@ -18,6 +19,7 @@ def init_db():
     con.commit()
     con.close()
 
+
 def add_one(el):
     con = sqlite3.connect('vehicles.db')
     c = con.cursor()
@@ -26,11 +28,19 @@ def add_one(el):
     con.commit()
     con.close()
 
-def del_one(id):
+
+def del_by_key(id):
     con = sqlite3.connect('vehicles.db')
     c = con.cursor()
     c.execute("DELETE from customers WHERE rowid = (?)", id)
     con.commit()
     con.close()
 
+
 def add_many(elements):
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.executemany("INSERT INTO vehicles VALUES (?, ?, ?)",
+                  (elements))
+    con.commit()
+    con.close()
