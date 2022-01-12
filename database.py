@@ -44,3 +44,16 @@ def add_many(elements):
                   (elements))
     con.commit()
     con.close()
+
+
+# Query db, return records.
+def show_all():
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.execute("SELECT rowid, * FROM vehicles")
+    items = c.fetchall()
+    for i in items:
+        print(i)
+
+    con.commit
+    con.close
