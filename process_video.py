@@ -57,11 +57,11 @@ def db_store(responses):
     entries = []
     for i in responses:
         try:
-            entries.append({
-                'plate': i['results'][0]['plate'],
-                'confidence': i['results'][0]['score'],
-                'process_time': i['processing_time']
-            })
+            entries.append([
+                (i['results'][0]['plate']),
+                (i['results'][0]['score']),
+                (i['processing_time'])
+            ])
         except IndexError:
             print("End of Entries")
             break
