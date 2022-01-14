@@ -20,11 +20,11 @@ def init_db():
     con.close()
 
 
-def add_one(el):
+def add_one(vehicle):
     con = sqlite3.connect('vehicles.db')
     c = con.cursor()
     c.execute("INSERT INTO vehicles VALUES (?, ?, ?)",
-              (el['plate'], el['confidence'], el['process_time']))
+              (vehicle['plate'], vehicle['confidence'], vehicle['process_time']))
     con.commit()
     con.close()
 
@@ -52,8 +52,8 @@ def show_all():
     c = con.cursor()
     c.execute("SELECT rowid, * FROM vehicles")
     items = c.fetchall()
-    for i in items:
-        print(i)
+    
+    print(*items, sep="\n")
 
     con.commit
     con.close
