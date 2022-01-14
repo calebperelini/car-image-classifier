@@ -8,7 +8,6 @@ import json
 response = requests.get('https://www.carjam.co.nz/api/availability/')
 
 args = {
-    'plate' : 'KNH93',
     'basic' : 1
 }
 
