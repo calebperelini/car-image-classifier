@@ -6,6 +6,7 @@ import cv2
 import database
 from io import BytesIO
 from PIL import Image
+from config import SECRET_KEY
 
 
 def capture_frames():
@@ -47,7 +48,7 @@ def evaluate_images(image_array: list) -> list:
             'https://api.platerecognizer.com/v1/plate-reader/',
             data=dict(regions=regions),
             files=dict(upload=byte_io),
-            headers={'Authorization': 'Token c5dde1d98512a9f4d442c16d38ac68f2b6bf36c7'})
+            headers={'Authorization': 'Token ' + SECRET_KEY}) # replace with your own key in a config.py file.
         responses.append(response.json())
 
     return responses
