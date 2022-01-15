@@ -73,8 +73,8 @@ def db_store(responses):
 
 def main():
     image_array = capture_frames()
-    results = evaluate_images(image_array)  # to be stored in SQLite DB
-    db_store(results)
+    results = evaluate_images(image_array)
+    db_store(results) # store results in db.
 
 
 if __name__ == "__main__":
