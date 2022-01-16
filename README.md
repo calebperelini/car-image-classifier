@@ -123,9 +123,11 @@ def add_many(elements):
     con.close()
 ```
 
-### Part II. Evaluating Images with a model.
+### Part II. Evaluating Images with a model
 
-This section proved difficult, due to a limited experience and understanding of Computer Vision, and it's associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on training a model that would evaluate colour only.
+This section was particularly challenging, due to a limited experience and understanding of Computer Vision and its associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on building and training a model that would evaluate colour only.
+
+For my dataset I used the [Vehicle Colour Recognition Dataset](https://www.kaggle.com/landrykezebou/vcor-vehicle-color-recognition-dataset)(VCoR). This dataset was particularly useful due to its size and ease of use, with each class of colour pre-categorised into directories, and split 50-50 for training and testing.
 
 ## Installation
 
