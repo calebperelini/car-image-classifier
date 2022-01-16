@@ -8,7 +8,7 @@ The model itself was developed using Tensorflow with Keras, trained on the Vehic
 
 In setting out to design a system for improving the ANPR I looked to take an approach that was well suited to my abilities, whilst leaving room for growth and exploration. 
 
-The code has been pre-compiled and executed in a series of jupyter notebooks for each respective step, the output of which can be seen in each notebook. In addition, the source code for each step is also included in the repo for review.
+The code has been pre-compiled and executed in a series of jupyter notebooks for each respective step, the output of which can be viewed in each notebook. In addition, the source code for each step is also included in the repo for review.
 
 ### Part I.) Extracting video frames and ANPR reads.
 
@@ -121,8 +121,9 @@ def add_many(elements):
     con.close()
 ```
 
+### Part II.) Evaluating Images with a model.
 
-
+This section proved difficult, due to a limited experience and understanding of Computer Vision, and it's associated libraries. Given the time constraints and my ability, I decided to limit the scope of this step and focus on training a model that would evaluate colour only.
 
 ## Installation
 
