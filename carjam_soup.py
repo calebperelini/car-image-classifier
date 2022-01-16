@@ -2,9 +2,9 @@
     Web scraper alternative to API access.
 """
 
-from bs4 import BeautifulSoup
 import requests
 import re
+from bs4 import BeautifulSoup
 
 def carjam_colour(plate: str) -> str:
     headers = {
