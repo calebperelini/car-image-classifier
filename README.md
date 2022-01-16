@@ -44,9 +44,31 @@ def capture_frames():
 
 Using the OpenCV library, frames were sampled from the file at 1 fps and returned as an array of image objects. 
 
-An initial problem encountered was `capture.read()` returning an image object with BGR as it's default colour space. This was solved with the `cv2.cvtColor()` method, which allows us to convert the captured frame to RGB.
+An initial problem encountered was `capture.read()` returning an `image` object with BGR as it's default colour space. This was solved with the `cv2.cvtColor()` method, which allows us to convert the captured frame to RGB.
 
+The next step was to convert the returned array of `image` objects into a byte streams, which the API would accept.
 
+```python
+def evaluate_images(image_array: list) -> list:
+    responses = []
+    for img in image_array:
+
+        byte_io = BytesIO()
+        img.save(byte_io, 'png')
+        byte_io.seek(0)  # seek start of I/O stream.
+        regions = ['nz']  # for greater region prediction.
+
+        response = requests.post(
+            'https://api.platerecognizer.com/v1/plate-reader/',
+            data=dict(regions=regions),
+            files=dict(upload=byte_io),
+            headers={'Authorization': 'Token ' + SECRET_KEY}) # replace with your own key in a config.py file.
+        responses.append(response.json())
+
+    return responses
+```
+
+The API accepts `regions` as a parameter in the POST request, for greater accuracy when making reads on plates of a specific regions. As we know all images in the set are of New Zealand cars we can add the `'nz'` flag to the request.
 
 ## Installation
 
