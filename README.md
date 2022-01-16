@@ -4,9 +4,53 @@ This project aims to improve the accuracy of the [Plate Recognizer](https://plat
 
 The model itself was developed using Tensorflow with Keras, trained on the Vehicle Color Recognition Dataset, an annotated dataset of over 12,000 vehicles available [on kaggle.](https://www.kaggle.com/landrykezebou/vcor-vehicle-color-recognition-dataset)
 
+## About
+
+In setting out to design a system for improving the ANPR I looked to take an approach that was well suited to my abilities, whilst leaving room for growth and exploration. 
+
+The code has been pre-compiled and executed in a series of jupyter notebooks for each respective step, the output of which can be seen in each notebook. In addition, the source code for each step is also included in the repo for review.
+
+### Part I.) Extracting video frames and ANPR reads.
+
+[Jupyter Notebook]()
+
+The first step was to extract frames from the provided `.mp4` and send them to the Plate Recognizer API for plate reads.
+
+```python
+def capture_frames():
+
+    capture = cv2.VideoCapture("nz_cars_ALPR.mp4")
+
+    frame_counter = 0
+    fps = 30
+    sample_rate = 1  # Set sample rate to 1fps.
+    images = []
+
+    while(capture.isOpened()):
+
+        ret, frame = capture.read()
+        if not ret:
+            break
+        if frame_counter % (fps // sample_rate) == 0:
+            # convert colour space from BGR to RGB.
+            RGB_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            images.append(Image.fromarray(RGB_frame))
+        frame_counter += 1
+
+    capture.release()
+    cv2.destroyAllWindows()
+    return images
+```
+
+Using the OpenCV library, frames were sampled from the file at 1 fps and returned as an array of image objects. 
+
+An initial problem encountered was `capture.read()` returning an image object with BGR as it's default colour space. This was solved with the `cv2.cvtColor()` method, which allows us to convert the captured frame to RGB.
+
+
+
 ## Installation
 
-Clone the repo and run `main.py` file.
+Clone the repo and run `main.py`.
 ```python
 git clone <this-repo>
 
