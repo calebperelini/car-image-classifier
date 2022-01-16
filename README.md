@@ -6,7 +6,13 @@ The model itself was developed using Tensorflow with Keras, trained on the Vehic
 
 ## Installation
 
+Clone the repo and run `main.py` file.
+```python
+git clone <this-repo>
 
+python main.py
+
+```
 
 
 ### Sources and external material referenced
