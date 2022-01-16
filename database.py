@@ -4,8 +4,6 @@ For SQLite DB handling.
 import sqlite3
 
 # initialise db, create data table.
-
-
 def init_db():
     con = sqlite3.connect('vehicles.db')
     c = con.cursor()
