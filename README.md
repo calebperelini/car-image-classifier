@@ -10,7 +10,7 @@ In setting out to design a system for improving the ANPR I looked to take an app
 
 The code has been pre-compiled and executed in a series of jupyter notebooks for each respective step, the output of which can be viewed in each notebook. In addition, the source code for each step is also included in the repo for review.
 
-### Part I.) Extracting video frames and ANPR reads.
+### Part I. Extracting video frames and ANPR reads.
 
 [Jupyter Notebook]()
 
@@ -93,7 +93,9 @@ def db_store(responses):
     database.show_all()
 ```
 
+
 The above method takes the plate read, confidence score, and processing time from the array of responses. It initialises a SQLite3 database, then adds them as entries by passing the data to a method in `database.py`.
+
 
 ```python
 import sqlite3
@@ -121,9 +123,9 @@ def add_many(elements):
     con.close()
 ```
 
-### Part II.) Evaluating Images with a model.
+### Part II. Evaluating Images with a model.
 
-This section proved difficult, due to a limited experience and understanding of Computer Vision, and it's associated libraries. Given the time constraints and my ability, I decided to limit the scope of this step and focus on training a model that would evaluate colour only.
+This section proved difficult, due to a limited experience and understanding of Computer Vision, and it's associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on training a model that would evaluate colour only.
 
 ## Installation
 
