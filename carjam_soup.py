@@ -1,5 +1,5 @@
 """
-    Web scraper alternative to API access.
+    Web scraper alternative to CarJam API access.
 """
 
 import requests
