@@ -46,7 +46,7 @@ Using the OpenCV library, frames were sampled from the file at 1 fps and returne
 
 An initial problem encountered was `capture.read()` returning an `image` object with BGR as it's default colour space. This was solved with the `cv2.cvtColor()` method, which allows us to convert the captured frame to RGB.
 
-The next step was to convert the returned array of `image` objects into a byte streams, which the API would accept.
+The next step was to convert the returned array of `image` objects into byte streams, which the API would accept.
 
 ```python
 def evaluate_images(image_array: list) -> list:
@@ -69,6 +69,60 @@ def evaluate_images(image_array: list) -> list:
 ```
 
 The API accepts `regions` as a parameter in the POST request, for greater accuracy when making reads on plates of specific regions. As we know all images in the set are of New Zealand cars, we can add the `'nz'` flag to the request.
+
+Once we have an array of responses from the service, we can then filter the data we need and store them in a SQLite database.
+
+```python
+
+import database
+
+def db_store(responses):
+    entries = []
+    for i in responses:
+        try:
+            entries.append([
+                (i['results'][0]['plate']),
+                (i['results'][0]['score']),
+                (i['processing_time'])
+            ])
+        except IndexError:
+            print("End of Entries")
+            break
+    database.init_db()
+    database.add_many(entries)
+    database.show_all()
+```
+
+The above method takes the plate read, confidence score, and processing time from the array of responses. It initialises a SQLite3 database, then adds them as entries by passing the data to a method in `database.py`.
+
+```python
+import sqlite3
+
+# initialise db, create data table.
+def init_db():
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.execute("""CREATE TABLE vehicles (
+        plate_prediction text,
+        score real,
+        processing_time real
+    )"""
+              )
+    print("Database initialised successfully.")
+    con.commit()
+    con.close()
+
+def add_many(elements):
+    con = sqlite3.connect('vehicles.db')
+    c = con.cursor()
+    c.executemany("INSERT INTO vehicles VALUES (?, ?, ?)",
+                  (elements))
+    con.commit()
+    con.close()
+```
+
+
+
 
 ## Installation
 
