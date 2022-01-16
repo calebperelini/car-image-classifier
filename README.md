@@ -125,7 +125,7 @@ def add_many(elements):
 
 ### Part II. Evaluating Images with a model
 
-[Notebook](rushanpr/Model Training.ipynb)
+[Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Training.ipynb)
 
 This section was particularly challenging, due to a limited experience in Computer Vision and its associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on developing a model that would evaluate colour only.
 
