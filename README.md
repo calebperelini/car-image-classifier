@@ -1,4 +1,4 @@
-# Car Vehicle Classification Model
+# Car Image Classification Model
 
 This project aims to improve the accuracy of the [Plate Recognizer](https://platerecognizer.com/) ANPR by cross checking plate reads against an image classification model. 
 
