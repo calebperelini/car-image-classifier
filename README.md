@@ -68,7 +68,7 @@ def evaluate_images(image_array: list) -> list:
     return responses
 ```
 
-The API accepts `regions` as a parameter in the POST request, for greater accuracy when making reads on plates of a specific regions. As we know all images in the set are of New Zealand cars we can add the `'nz'` flag to the request.
+The API accepts `regions` as a parameter in the POST request, for greater accuracy when making reads on plates of specific regions. As we know all images in the set are of New Zealand cars, we can add the `'nz'` flag to the request.
 
 ## Installation
 
