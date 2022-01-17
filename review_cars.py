@@ -24,9 +24,9 @@ def get_predictions(filename_list: list) -> list:
 
 def compare_carjam(predictions: list):
     db = database.retreive_all()
-    for pr in predictions:
-        for entry in db:
-            pr['plate_read'] = entry
+    for i in range(len(predictions) - 1):
+        predictions[i]['plate_read'] = db[i]
+        print(predictions[i])
     
     for car in predictions:
         carj_colour = carjam_soup.carjam_colour(car['plate_read'][1])
@@ -35,6 +35,9 @@ def compare_carjam(predictions: list):
                 car['Match'] = True
             else:
                 car['Match'] = False
+    
+    for car in predictions:
+        print(car)
 
 def main():
     filenames = get_filenames('images')
