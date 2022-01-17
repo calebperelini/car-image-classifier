@@ -283,7 +283,19 @@ def display(predictions: list):
 * Model output performance.
     * Currently, the model has significant performance limitations which affect the quality of it's predictions. 
     * A large number of incorrect reads, both in exploratory testing and in the final output, originate primarily from the ambiguity between the difference classes / colours.
-    * This is an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands/
+    * This is possibly an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands.
+* Incorrect plate reads
+    * Whilst the majority of plate reads were accurate, the final image in the set produced an incorrect read, likely due to the plate being cut off and making edge detection more challenging.
+
+#### Scope For Improvement
+
+* Expanding model functionality
+    * At present, the existing model is not capable of making predictions on make or model of vehicle. Given more time, I would look to expand my knowledge and deepen my understanding of Computer Vision and Tensorflow, and add this functionality to the system.
+    * The accuracy of the models colour reads would also benefit from improvement, as I believe it is currently overtrained on the existing dataset.
+* CarJam API Integration
+    * As stated prior, the lack of API access to CarJam presents a significant hurdle to making the system more performant, as well as future-proofing it against changes to the service in the future. Moreover, it would make handling information from CarJam simpler due to API requests being idempotent.
+* Programme Structure
+    * At present the performance and time-complexity of many of the algorithms used is such that the system would not perfom consistently at scale. 
 
 
 
