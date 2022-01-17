@@ -12,11 +12,17 @@ def carjam_colour(plate: str) -> str:
     }
     
     r = requests.get('https://www.carjam.co.nz/car/?plate=' + plate.upper(), headers=headers).text
-    soup = BeautifulSoup(r, 'lxml')
-    car_colour_html = str(soup.findAll('span', {'class': 'value'})[3])
-    car_colour = re.findall( r'>(.*?)<' , car_colour_html)[0]
-
-    return car_colour
+    try:
+        soup = BeautifulSoup(r, 'lxml')
+        car_colour_html = str(soup.findAll('span', {'class': 'value'})[3])
+        car_colour = re.findall( r'>(.*?)<' , car_colour_html)[0]
+        if not car_colour: 
+            raise ValueError
+        else:
+            return car_colour
+    except ValueError:
+        return 'No valid plate found.'
+    
 
 
 
