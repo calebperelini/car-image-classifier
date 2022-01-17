@@ -159,7 +159,7 @@ history = model.fit(
 )
 ```
 
-### Utilising the model for colour reads
+#### Utilising the model for colour reads
 
 [Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Usage.ipynb)
 
@@ -190,6 +190,12 @@ def predict_image(file_path) -> dict:
 ```
 
 The above method accepts a file path and returns a dictionary containing the `colour` and `conf`, the predicted colour and confidence level respectively.
+
+### Part 3. CarJam comparison and results.
+
+[Notebook]()
+
+
 
 ## Installation
 
