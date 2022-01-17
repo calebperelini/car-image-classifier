@@ -148,7 +148,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 Due to the dataset already being split into training, testing, and validation sets, a validation split parameter was not needed, and instead the above step was repeated for the validation directory.
 
 Once the inputs were optimized and resized, the model was trained for 10 epochs, reaching an accuracy of 
-0.9821 by epoch 10.
+`0.9821` by epoch 10.
 
 ```python
 epochs=10
