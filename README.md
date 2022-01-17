@@ -259,7 +259,9 @@ def compare_carjam(predictions: list) -> list:
     return predictions
 ```
 
-Finally, these predictions are passed to the CarJam scraper method, and the values are compared for equality. These results are printed as below. The final output produces a list of plate reads, the predicted colour from the model, and a `match`, which verifies if the output matches that of CarJam.
+Finally, these predictions are passed to the CarJam scraper method, and the values are compared for equality. 
+
+These results are printed as below. The final output produces a list of plate reads, the predicted colour from the model, and a `match`, which verifies if the output matches that of CarJam.
 
 ```python
 def display(predictions: list):
@@ -271,6 +273,17 @@ def display(predictions: list):
             pr['Match'])
             )
 ```
+
+### Part 4. Future Work
+
+#### Issues
+
+    - CarJam API integration.
+        - Being unable to directly access the API presents a significant roadblock to the robustness of the current approach. Whilst the Beautiful Soup approach is functional, it is by no means ideal.
+    - Model output performance.
+        - Currently, the model has significant performance limitations which affect the quality of it's predictions. 
+        - A large number of incorrect reads, both in exploratory testing and in the final output, originate primarily from the ambiguity between the difference classes / colours.
+        - This is an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands/
 
 ## Installation
 
