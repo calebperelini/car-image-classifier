@@ -301,17 +301,18 @@ def display(predictions: list):
 
 ### Sources and external material referenced
 
-- Plate Recognizer API Documentation
-    - https://docs.platerecognizer.com/
+* [Beautiful Soup Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
-- Extracting frames from video
-    - https://www.askpython.com/python/examples/extract-images-from-video
+* [Plate Recognizer API Documentation](https://docs.platerecognizer.com/)
 
-- Preparing PIL objects for requests.
-    - https://stackoverflow.com/questions/50350624/sending-pil-image-over-request-in-python
+* [SQLite3 Docs](https://www.sqlite.org/docs.html)
+    * [Python SQLite3 API Docs](https://docs.python.org/3/library/sqlite3.html)
 
-- Image Classification with Tensorflow
-    - https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8
+* [Extracting frames from video with PIL](https://www.askpython.com/python/examples/extract-images-from-video)
+
+* [Preparing PIL objects for requests.](https://stackoverflow.com/questions/50350624/sending-pil-image-over-request-in-python)
+
+* [Image Classification with Tensorflow](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8)
 
 
 
