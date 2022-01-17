@@ -278,22 +278,13 @@ def display(predictions: list):
 
 #### Issues
 
-    - CarJam API integration.
-        - Being unable to directly access the API presents a significant roadblock to the robustness of the current approach. Whilst the Beautiful Soup approach is functional, it is by no means ideal.
-    - Model output performance.
-        - Currently, the model has significant performance limitations which affect the quality of it's predictions. 
-        - A large number of incorrect reads, both in exploratory testing and in the final output, originate primarily from the ambiguity between the difference classes / colours.
-        - This is an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands/
+* CarJam API integration.
+    * Being unable to directly access the API presents a significant roadblock to the robustness of the current approach. Whilst the Beautiful Soup approach is functional, it is by no means ideal.
+* Model output performance.
+    * Currently, the model has significant performance limitations which affect the quality of it's predictions. 
+    * A large number of incorrect reads, both in exploratory testing and in the final output, originate primarily from the ambiguity between the difference classes / colours.
+    * This is an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands/
 
-## Installation
-
-Clone the repo and run `main.py`.
-```python
-git clone <this-repo>
-
-python main.py
-
-```
 
 
 ### Sources and external material referenced
