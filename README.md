@@ -223,7 +223,7 @@ def carjam_colour(plate: str) -> str:
         return None
 ```
 
-This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server-side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the simplicity of CarJam.
+This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server-side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the layout of CarJam.
 
 ## Installation
 
