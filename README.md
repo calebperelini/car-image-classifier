@@ -193,9 +193,37 @@ The above method accepts a file path and returns a dictionary containing the `co
 
 ### Part 3. CarJam comparison and results.
 
-[Notebook]()
+[Notebook](https://github.com/calebperelini/rushanpr/blob/develop/PartIII.ipynb)
 
+A significant limitation to this step was CarJam. Applying for developer access for an API key yielded no response, nor was querying the API for basic vehicle information free.
 
+In lieu of being able to access the API directly, I built a script to web scrape the information using [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/).
+
+```python
+import requests
+import re
+from bs4 import BeautifulSoup
+
+def carjam_colour(plate: str) -> str:
+    headers = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'
+    }
+    
+    r = requests.get('https://www.carjam.co.nz/car/?plate=' + plate.upper(), headers=headers).text
+    try:
+        soup = BeautifulSoup(r, 'lxml')
+        car_colour_html = str(soup.findAll('span', {'class': 'value'})[3])
+        car_colour = re.findall( r'>(.*?)<' , car_colour_html)[0]
+        if not car_colour: 
+            raise ValueError
+        else:
+            return car_colour.lower()
+    except ValueError:
+        print('Plate: {}, no valid entry found'.format(plate))
+        return None
+```
+
+This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server-side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the simplicity of CarJam.
 
 ## Installation
 
