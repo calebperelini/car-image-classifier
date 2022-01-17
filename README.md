@@ -159,7 +159,37 @@ history = model.fit(
 )
 ```
 
+### Utilising the model for colour reads
 
+[Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Usage.ipynb)
+
+With the model trained and saved, a handler method in `model_eval.py` was built to query the model, and provide a layer of abstraction for simpler predictions.
+
+```python
+# perform prediction on a single image.
+def predict_image(file_path) -> dict:
+    img_height = 180
+    img_width = 180
+    
+    img = tf.keras.utils.load_img(
+        file_path, target_size=(img_height, img_width)
+    )
+    
+    img_array = tf.keras.utils.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)
+    
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
+
+    predicted_class = {
+        'colour' : class_names[np.argmax(score)],
+        'conf' : round(100 * np.max(score), 2)
+    }
+
+    return predicted_class
+```
+
+The above method accepts a file path and returns a dictionary containing the `colour` and `conf`, the predicted colour and confidence level respectively.
 
 ## Installation
 
