@@ -14,6 +14,7 @@ class_names = ['beige', 'black', 'blue',
                'tan', 'white', 'yellow'
               ]
 
+# perform prediction on a single image.
 def predict_image(tfmodel, file_path) -> dict:
     img_height = 180
     img_width = 180
