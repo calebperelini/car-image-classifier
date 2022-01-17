@@ -135,7 +135,29 @@ The dataset used was the [Vehicle Colour Recognition Dataset](https://www.kaggle
 
 Unclear on where to start, I referenced [Tensorflow's tutorial](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8) for building image classification models with Tensorflow and Keras.
 
-After importing the required packages, I loaded the dataset using `tf.keras.utils.image_dataset_from_directory`
+After importing the required packages, the training dataset was loaded in as below. 
+
+```python
+train_ds = tf.keras.utils.image_dataset_from_directory(
+  data_dir/"train",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
+```
+
+Due to the dataset already being split into training, testing, and validation sets, a validation split parameter was not needed, and instead the above step was repeated for the validation directory.
+
+Once the inputs were optimized and resized, the model was trained for 10 epochs, reaching an accuracy of 
+0.9821 by epoch 10.
+
+```python
+epochs=10
+history = model.fit(
+  train_ds,
+  validation_data=val_ds,
+  epochs=epochs
+)
+```
 
 
 
