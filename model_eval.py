@@ -1,8 +1,5 @@
 import numpy as np
-import os
-import PIL
 import tensorflow as tf
-from PIL import Image
 
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -17,7 +14,7 @@ class_names = ['beige', 'black', 'blue',
                'tan', 'white', 'yellow'
               ]
 
-def predict_image(tfmodel, file_path):
+def predict_image(tfmodel, file_path) -> dict:
     img_height = 180
     img_width = 180
     
@@ -30,7 +27,10 @@ def predict_image(tfmodel, file_path):
     
     predictions = tfmodel.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    print(
-    "This car is most likely {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
-)
+
+    predicted_class = {
+        'colour' : class_names[np.argmax(score)],
+        'conf' : 100 * np.max(score)
+    }
+
+    return predicted_class
