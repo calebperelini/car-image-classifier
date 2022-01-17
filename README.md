@@ -125,6 +125,8 @@ def add_many(elements):
 
 ### Part II. Evaluating Images with a model
 
+#### Training the Model.
+
 [Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Training.ipynb)
 
 This section was particularly challenging, due to a limited experience in Computer Vision and its associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on developing a model that would evaluate colour only.
@@ -133,32 +135,184 @@ The dataset used was the [Vehicle Colour Recognition Dataset](https://www.kaggle
 
 Unclear on where to start, I referenced [Tensorflow's tutorial](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8) for building image classification models with Tensorflow and Keras.
 
+After importing the required packages, the training dataset was loaded in as below. 
 
-
-## Installation
-
-Clone the repo and run `main.py`.
 ```python
-git clone <this-repo>
-
-python main.py
-
+train_ds = tf.keras.utils.image_dataset_from_directory(
+  data_dir/"train",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
 ```
+
+Due to the dataset already being split into training, testing, and validation sets, a validation split parameter was not needed, and instead the above step was repeated for the validation directory.
+
+Once the inputs were optimized and resized, the model was trained for 10 epochs, reaching an accuracy of 
+`0.9821` by epoch 10.
+
+```python
+epochs=10
+history = model.fit(
+  train_ds,
+  validation_data=val_ds,
+  epochs=epochs
+)
+```
+
+#### Utilising the model for colour reads
+
+[Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Usage.ipynb)
+
+With the model trained and saved, a handler method in `model_eval.py` was built to query the model, and provide a layer of abstraction for simpler predictions.
+
+```python
+# perform prediction on a single image.
+def predict_image(file_path) -> dict:
+    img_height = 180
+    img_width = 180
+    
+    img = tf.keras.utils.load_img(
+        file_path, target_size=(img_height, img_width)
+    )
+    
+    img_array = tf.keras.utils.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)
+    
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
+
+    predicted_class = {
+        'colour' : class_names[np.argmax(score)],
+        'conf' : round(100 * np.max(score), 2)
+    }
+
+    return predicted_class
+```
+
+The above method accepts a file path and returns a dictionary containing the `colour` and `conf`, the predicted colour and confidence level respectively.
+
+### Part 3. CarJam comparison and results.
+
+[Notebook](https://github.com/calebperelini/rushanpr/blob/develop/PartIII.ipynb)
+
+A significant limitation to this step was CarJam. Applying for developer access for an API key yielded no response, nor was querying the API for basic vehicle information free.
+
+In lieu of being able to access the API directly, I built a script to web scrape the information using [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/).
+
+```python
+import requests
+import re
+from bs4 import BeautifulSoup
+
+def carjam_colour(plate: str) -> str:
+    headers = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'
+    }
+    
+    r = requests.get('https://www.carjam.co.nz/car/?plate=' + plate.upper(), headers=headers).text
+    try:
+        soup = BeautifulSoup(r, 'lxml')
+        car_colour_html = str(soup.findAll('span', {'class': 'value'})[3])
+        car_colour = re.findall( r'>(.*?)<' , car_colour_html)[0]
+        if not car_colour: 
+            raise ValueError
+        else:
+            return car_colour.lower()
+    except ValueError:
+        print('Plate: {}, no valid entry found'.format(plate))
+        return None
+```
+
+This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the layout of CarJam.
+
+With this written, the database could be queried, the records of each plate retrieved, and then compared against the models predictions.
+
+```python
+from model_eval import predict_image
+
+def get_predictions(filename_list: list) -> list:
+    predictions = []
+    for f in filename_list:
+        predictions.append(predict_image(f))
+    return predictions
+```
+
+The above method passes the filenames to the model for input, then returns an array of predictions, as well as an associated confidence score.
+
+```python
+import carjam_soup
+
+def compare_carjam(predictions: list) -> list:
+    db = database.retreive_all()
+    for i in range(len(predictions) - 1):
+        predictions[i]['plate_read'] = db[i]
+    
+    for entry in predictions[:len(predictions) - 1]:
+        entry_plate = entry['plate_read'][1]
+        carj_colour = carjam_soup.carjam_colour(entry_plate)
+        if carj_colour is not None:
+            if carj_colour == entry['colour']:
+                entry['Match'] = True
+            else:
+                entry['Match'] = False
+    
+    return predictions
+```
+
+Finally, these predictions are passed to the CarJam scraper method, and the values are compared for equality. 
+
+These results are printed as below. The final output produces a list of plate reads, the predicted colour from the model, and a `match`, which verifies if the output matches that of CarJam.
+
+```python
+def display(predictions: list):
+    predictions = predictions[:-1]
+    for pr in predictions:
+        print("Plate Read: {}, Predicted Colour: {}, Match: {}".format(
+            pr['plate_read'][1],
+            pr['colour'], 
+            pr['Match'])
+            )
+```
+
+### Part 4. Future Work
+
+#### Issues
+
+* CarJam API integration.
+    * Being unable to directly access the API presents a significant roadblock to the robustness of the current approach. Whilst the Beautiful Soup approach is functional, it is by no means ideal.
+* Model output performance.
+    * Currently, the model has significant performance limitations which affect the quality of it's predictions. 
+    * A large number of incorrect reads, both in exploratory testing and in the final output, originate primarily from the ambiguity between the difference classes / colours.
+    * This is possibly an issue with class definitions, as well as the labelling of the dataset itself, as colours such as 'white', 'beige', and 'silver' are oftentimes identical. This presents a challenge as many manufacturers use proprietary colour names and definitions which may differ wildly from other brands.
+* Incorrect plate reads
+    * Whilst the majority of plate reads were accurate, the final image in the set produced an incorrect read, likely due to the plate being cut off and making edge detection more challenging.
+
+#### Scope For Improvement
+
+* Expanding model functionality
+    * At present, the existing model is not capable of making predictions on make or model of vehicle. Given more time, I would look to expand my knowledge and deepen my understanding of Computer Vision and Tensorflow, and add this functionality to the system.
+    * The accuracy of the models colour reads would also benefit from improvement, as I believe it is currently overtrained on the existing dataset.
+* CarJam API Integration
+    * As stated prior, the lack of API access to CarJam presents a significant hurdle to making the system more performant, as well as future-proofing it against changes to the service in the future. Moreover, it would make handling information from CarJam simpler due to API requests being idempotent.
+* Programme Structure
+    * At present the performance and time-complexity of many of the algorithms used is such that the system would not perfom consistently at scale. 
+
 
 
 ### Sources and external material referenced
 
-- Plate Recognizer API Documentation
-    - https://docs.platerecognizer.com/
+* [Beautiful Soup Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
-- Extracting frames from video
-    - https://www.askpython.com/python/examples/extract-images-from-video
+* [Plate Recognizer API Documentation](https://docs.platerecognizer.com/)
 
-- Preparing PIL objects for requests.
-    - https://stackoverflow.com/questions/50350624/sending-pil-image-over-request-in-python
+* [SQLite3 Docs](https://www.sqlite.org/docs.html)
+    * [Python SQLite3 API Docs](https://docs.python.org/3/library/sqlite3.html)
 
-- Image Classification with Tensorflow
-    - https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8
+* [Extracting frames from video with PIL](https://www.askpython.com/python/examples/extract-images-from-video)
+
+* [Preparing PIL objects for requests.](https://stackoverflow.com/questions/50350624/sending-pil-image-over-request-in-python)
+
+* [Image Classification with Tensorflow](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8)
 
 
 
