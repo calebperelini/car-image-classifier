@@ -223,7 +223,54 @@ def carjam_colour(plate: str) -> str:
         return None
 ```
 
-This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server-side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the layout of CarJam.
+This approach has a number of drawbacks. Primarily, its lack of robustness against dynamic webpages, or ip-timeouts on the server side. Moreover, it is challenging to catch the wide array of errors and invalid responses. Regardless, it worked as intended due to the layout of CarJam.
+
+With this written, the database could be queried, the records of each plate retrieved, and then compared against the models predictions.
+
+```python
+from model_eval import predict_image
+
+def get_predictions(filename_list: list) -> list:
+    predictions = []
+    for f in filename_list:
+        predictions.append(predict_image(f))
+    return predictions
+```
+
+The above method passes the filenames to the model for input, then returns an array of predictions, as well as an associated confidence score.
+
+```python
+import carjam_soup
+
+def compare_carjam(predictions: list) -> list:
+    db = database.retreive_all()
+    for i in range(len(predictions) - 1):
+        predictions[i]['plate_read'] = db[i]
+    
+    for entry in predictions[:len(predictions) - 1]:
+        entry_plate = entry['plate_read'][1]
+        carj_colour = carjam_soup.carjam_colour(entry_plate)
+        if carj_colour is not None:
+            if carj_colour == entry['colour']:
+                entry['Match'] = True
+            else:
+                entry['Match'] = False
+    
+    return predictions
+```
+
+Finally, these predictions are passed to the CarJam scraper method, and the values are compared for equality. These results are printed as below. The final output produces a list of plate reads, the predicted colour from the model, and a `match`, which verifies if the output matches that of CarJam.
+
+```python
+def display(predictions: list):
+    predictions = predictions[:-1]
+    for pr in predictions:
+        print("Plate Read: {}, Predicted Colour: {}, Match: {}".format(
+            pr['plate_read'][1],
+            pr['colour'], 
+            pr['Match'])
+            )
+```
 
 ## Installation
 
