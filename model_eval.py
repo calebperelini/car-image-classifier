@@ -1,10 +1,6 @@
 import numpy as np
 import tensorflow as tf
 
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.models import Sequential
-
 model = tf.keras.models.load_model('saved_model/car_model')
 
 class_names = ['beige', 'black', 'blue', 
