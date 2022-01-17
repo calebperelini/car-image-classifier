@@ -129,7 +129,11 @@ def add_many(elements):
 
 This section was particularly challenging, due to a limited experience in Computer Vision and its associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on developing a model that would evaluate colour only.
 
-For my dataset I used the [Vehicle Colour Recognition Dataset](https://www.kaggle.com/landrykezebou/vcor-vehicle-color-recognition-dataset) (VCoR). This dataset was particularly useful due to its size and ease of use, with each class of colour pre-categorised into directories, and split 50-50 for training and testing.
+For the dataset I used the [Vehicle Colour Recognition Dataset](https://www.kaggle.com/landrykezebou/vcor-vehicle-color-recognition-dataset) (VCoR). This dataset was particularly useful due to its size and ease of use, with each class of colour pre-categorised into directories, and split 50-50 for training and testing.
+
+Unclear on where to start, I referenced [Tensorflow's tutorial](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8) for building image classification models with Tensorflow and Keras.
+
+
 
 ## Installation
 
