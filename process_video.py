@@ -8,7 +8,7 @@ from io import BytesIO
 from PIL import Image
 from config import SECRET_KEY
 
-
+#capture frames and return array of image objects.
 def capture_frames():
 
     capture = cv2.VideoCapture("nz_cars_ALPR.mp4")
@@ -33,6 +33,25 @@ def capture_frames():
     cv2.destroyAllWindows()
     return images
 
+#capture and save frames
+def save_frames():
+    capture = cv2.VideoCapture("nz_cars_ALPR.mp4")
+
+    frame_counter = 0
+    fps = 30
+    sample_rate = 1  # Set sample rate to 1fps.
+    
+    while(capture.isOpened()):
+        
+        ret, frame = capture.read()
+        if not ret:
+            break
+        if frame_counter % (fps // sample_rate) == 0:
+            cv2.imwrite('images/test' + str(frame_counter) + '.jpg', frame)
+        frame_counter += 1
+
+    capture.release()
+    print("Saved Images")
 
 # process images into bytestream, send to API.
 def evaluate_images(image_array: list) -> list:
@@ -73,6 +92,7 @@ def db_store(responses):
 
 def main():
     image_array = capture_frames()
+    save_frames()
     results = evaluate_images(image_array)
     db_store(results) # store results in db.
 
