@@ -3,7 +3,7 @@ For passing images to the model for review, and comparing against carjam output.
 """
 
 import os
-from model_eval import predict_image, model
+from model_eval import predict_image
 
 def get_filenames(path: str) -> list:
     filenames_list = []
@@ -17,8 +17,9 @@ def get_filenames(path: str) -> list:
 def get_predictions(filename_list: list) -> list:
     predictions = []
     for f in filename_list:
-        predictions.append(predict_image(model, f))
-    print(predictions)
+        predictions.append(predict_image(f))
+    for i in predictions:
+        print(i)
     print(len(predictions))
 
 get_predictions(get_filenames('images'))
