@@ -12,7 +12,7 @@ The code has been pre-compiled and executed in a series of jupyter notebooks for
 
 ### Part I. Extracting video frames and ANPR reads.
 
-[Jupyter Notebook]()
+[Notebook](https://github.com/calebperelini/rushanpr/blob/main/partI.ipynb)
 
 The first step was to extract frames from the provided `.mp4` and send them to the Plate Recognizer API for plate reads.
 
