@@ -193,7 +193,7 @@ The above method accepts a file path and returns a dictionary containing the `co
 
 ### Part 3. CarJam comparison and results.
 
-[Notebook](https://github.com/calebperelini/rushanpr/blob/develop/PartIII.ipynb)
+[Notebook](https://github.com/calebperelini/rushanpr/blob/main/PartIII.ipynb)
 
 A significant limitation to this step was CarJam. Applying for developer access for an API key yielded no response, nor was querying the API for basic vehicle information free.
 
