@@ -19,7 +19,7 @@ def carjam_colour(plate: str) -> str:
         if not car_colour: 
             raise ValueError
         else:
-            return car_colour[0].lower()
+            return car_colour.lower()
     except ValueError:
         print('Plate: {}, no valid entry found'.format(plate))
         return None
