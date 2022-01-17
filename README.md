@@ -125,6 +125,8 @@ def add_many(elements):
 
 ### Part II. Evaluating Images with a model
 
+#### Training the Model.
+
 [Notebook](https://github.com/calebperelini/rushanpr/blob/main/Model%20Training.ipynb)
 
 This section was particularly challenging, due to a limited experience in Computer Vision and its associated tools. Given the time constraints and my ability, I decided to limit the scope of this step and focus on developing a model that would evaluate colour only.
@@ -132,6 +134,8 @@ This section was particularly challenging, due to a limited experience in Comput
 The dataset used was the [Vehicle Colour Recognition Dataset](https://www.kaggle.com/landrykezebou/vcor-vehicle-color-recognition-dataset) (VCoR). This dataset consists was particularly useful due to its size and ease of use, with each class of colour pre-categorised into directories, and split 50-50 for training and testing.
 
 Unclear on where to start, I referenced [Tensorflow's tutorial](https://www.tensorflow.org/tutorials/images/classification?fbclid=IwAR3dSGQ0W_EZEh_cr_LLXTNvGkZJqPsu1g6Li-ESI5jPffxvA0LABA9S6R8) for building image classification models with Tensorflow and Keras.
+
+After importing the required packages, I loaded the dataset using `tf.keras.utils.image_dataset_from_directory`
 
 
 
